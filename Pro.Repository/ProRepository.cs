@@ -44,7 +44,7 @@ namespace Pro.Repository
                 .Include(pe => pe.PalestranteEventos)
                 .ThenInclude(p => p.Palestrante);
         }
-        query = query.OrderByDescending(c => c.DataEvento);
+        query = query.OrderBy(c => c.Id);
         return await query.ToArrayAsync();        
     }
     public async Task<Evento[]> GetAllEventoAsyncByTema(string tema, bool includePalestrantes)
@@ -72,7 +72,7 @@ namespace Pro.Repository
                 .Include(pe => pe.PalestranteEventos)
                 .ThenInclude(p => p.Palestrante);
         }
-        query = query.OrderByDescending(c => c.DataEvento)
+        query = query.OrderBy(c => c.Id)
             .Where(c => c.Id == EventoId);
         return await query.FirstOrDefaultAsync();
     }
