@@ -8,6 +8,7 @@ namespace Pro.API.Helpers
 {
     public class AutoMapperProfiles : Profile
     {
+
         public AutoMapperProfiles()
         {
             CreateMap<Evento, EventoDto>()
@@ -24,9 +25,9 @@ namespace Pro.API.Helpers
 
             CreateMap<Lote, LoteDto>().ReverseMap();
             CreateMap<RedeSocial, RedeSocialDto>().ReverseMap();
+
             CreateMap<User, UserDto>().ReverseMap();
             CreateMap<User, UserLoginDto>().ReverseMap();
-
         }
     }
 }

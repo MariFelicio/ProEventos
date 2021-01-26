@@ -17,21 +17,21 @@ using Pro.API.Dtos;
 
 namespace ProAgil.WebAPI.Controllers
 {
-  [Route("api/[controller]")]
+   [Route("api/[controller]")]
   [ApiController]
-  public class UserController : ControllerBase
+   public class UserController : ControllerBase
   {
-    private readonly IConfiguration _config;
+   private readonly IConfiguration _config;
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
     private readonly IMapper _mapper;
 
-    public UserController(IConfiguration config,
+   public UserController(IConfiguration config,
                           UserManager<User> userManager,
                           SignInManager<User> signInManager,
                           IMapper mapper)
     {
-      _signInManager = signInManager;
+        _signInManager = signInManager;
       _mapper = mapper;
       _config = config;
       _userManager = userManager;
@@ -43,7 +43,7 @@ namespace ProAgil.WebAPI.Controllers
         return Ok(new UserDto());
     }
 
-    [HttpPost("Register")]
+     [HttpPost("Register")]
     [AllowAnonymous]
     public async Task<IActionResult> Register(UserDto userDto)
     {
@@ -83,7 +83,7 @@ namespace ProAgil.WebAPI.Controllers
                 var appUser = await _userManager.Users
                     .FirstOrDefaultAsync(u => u.NormalizedUserName == userLogin.UserName.ToUpper());
 
-                var userToReturn = _mapper.Map<UserLoginDto>(appUser);
+                 var userToReturn = _mapper.Map<UserLoginDto>(appUser);
 
                 return Ok(new {
                     token = GenerateJWToken(appUser).Result,
@@ -91,7 +91,7 @@ namespace ProAgil.WebAPI.Controllers
                 });
             }
 
-            return Unauthorized();
+             return Unauthorized();
         }
         catch (System.Exception ex)
         {
@@ -103,30 +103,31 @@ namespace ProAgil.WebAPI.Controllers
     {
         var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new Claim(ClaimTypes.Name, user.UserName)
         };
 
         var roles = await _userManager.GetRolesAsync(user);
+
 
         foreach (var role in roles)
         {
             claims.Add(new Claim(ClaimTypes.Role, role));
         }
 
-        var key = new SymmetricSecurityKey(Encoding.ASCII
+          var key = new SymmetricSecurityKey(Encoding.ASCII
             .GetBytes(_config.GetSection("AppSettings:Token").Value));
 
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
         var tokenDescriptor = new SecurityTokenDescriptor
-        {
+         {
             Subject = new ClaimsIdentity(claims),
             Expires = DateTime.Now.AddDays(1),
             SigningCredentials = creds
         };
 
-        var tokenHandler = new JwtSecurityTokenHandler();
+         var tokenHandler = new JwtSecurityTokenHandler();
 
         var token = tokenHandler.CreateToken(tokenDescriptor);
 
